@@ -1,26 +1,36 @@
 #---Print color---
 class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
+   PURPLE    = '\033[95m'
+   CYAN      = '\033[96m'
+   DARKCYAN  = '\033[36m'
+   BLUE      = '\033[94m'
+   GREEN     = '\033[92m'
+   YELLOW    = '\033[93m'
+   RED       = '\033[91m'
+   BOLD      = '\033[1m'
    UNDERLINE = '\033[4m'
-   GRAY = '\033[2m'
-   KURSIV = '\033[3m'
-   END = '\033[0m'
+   GRAY      = '\033[2m'
+   KURSIV    = '\033[3m'
+   END       = '\033[0m'
    
 #---Printing matrix---
 def print_matrix(matrix):
+
+    list = []
+    for i in range(4):
+        for j in range(4):
+            if int(matrix[i,j]) == 0:
+                list.append(color.GRAY + "0" + color.END)
+            else:
+                list.append(color.BOLD + "%.d" % int(matrix[i,j]) + color.BOLD)
+
     print (chr(27) + "[2J")     #Clear terminal 
     print ("\t")
-    print ("\t",int(matrix[0,0]),"\t",int(matrix[0,1]),"\t",int(matrix[0,2]),"\t",int(matrix[0,3]),"\n")
-    print ("\t",int(matrix[1,0]),"\t",int(matrix[1,1]),"\t",int(matrix[1,2]),"\t",int(matrix[1,3]),"\n")
-    print ("\t",int(matrix[2,0]),"\t",int(matrix[2,1]),"\t",int(matrix[2,2]),"\t",int(matrix[2,3]),"\n")
-    print ("\t",int(matrix[3,0]),"\t",int(matrix[3,1]),"\t",int(matrix[3,2]),"\t",int(matrix[3,3]),"\n")
+    print ("\t", list[0],  "\t", list[1],  "\t", list[2],  "\t", list[3],  "\n")
+    print ("\t", list[4],  "\t", list[5],  "\t", list[6],  "\t", list[7],  "\n")
+    print ("\t", list[8],  "\t", list[9],  "\t", list[10], "\t", list[11], "\n")
+    print ("\t", list[12], "\t", list[13], "\t", list[14], "\t", list[15], "\n")
+    
     
 #---Gives the leaderboard---
 def leaderboard(name, point, filename):

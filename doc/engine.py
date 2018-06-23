@@ -321,9 +321,9 @@ def Engine(N, M, goal, prob_doubleM, points):
                         d += 1
             if d == 0:     
                 print (color.RED + "Game over" + color.END)
-                name = raw_input("Please enter your name, mister: ")
+                name = input("Please enter your name, mister: ")
                 leaderboard(name, points, '.leaderboard')
                 break
 
         if num_goal > 0:
-            print ("Congratulation, you've reached %.d for the %.d. time" % (goal,num_goal))
+            print ("Congratulation, you've reached %.d for the %.d. times" % (goal,num_goal))
