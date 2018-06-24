@@ -1,5 +1,7 @@
 from random_options import *
 from tools import *
+from solver import *
+from time import sleep
 
 '''
 ---To be fixed---
@@ -8,7 +10,7 @@ from tools import *
 - And leaderboard spacing can be fixed
 '''
 
-def Engine(N, M, goal, prob_doubleM, points):
+def Engine(N, M, goal, prob_doubleM, points, mode):
     matrix = np.zeros([N, N])           #Creating matrix
     ran = Random(N, M, prob_doubleM)    #Create random object
 
@@ -27,7 +29,11 @@ def Engine(N, M, goal, prob_doubleM, points):
     num_goal = 0                    #Number of times goal is reached
 
     while True:
-        arrow = input("Please use 'w', 's', 'a' or 'd' to move the tiles: ")
+        if mode == 0:
+            arrow = input("Please use 'w', 's', 'a' or 'd' to move the tiles: ")
+        elif mode == 1:
+            arrow = best_swipe_dir(matrix)
+            #sleep(0.1)
         moves = 0           #Number of tiles moving by one swipe
         merges = 0          #Number of tiles merging by one swipe
 
@@ -305,20 +311,26 @@ def Engine(N, M, goal, prob_doubleM, points):
                     randomindex = listfori.index(random.choice(listfori))
                     matrix[listfori[randomindex],listforj[randomindex]] = ran.ran_val()
                     print_matrix(matrix)
-                    print ("Points: ",int(points))
+                    print ("Points: ", int(points))
                 else:
                     matrix[listfori[0]][listforj[0]] = ran.ran_val()
                     print_matrix(matrix)
-                    print ("Points: ",int(points))
+                    print ("Points: ", int(points))
             else:
                 print ("Please swipe in another direction!")
             
         else:
             d = 0
             for i in range(N-1):
-                for j in range(N-1):
-                    if matrix[i,j]==matrix[i+1,j] or matrix[i,j]==matrix[i,j+1]:
+                for j in range(N):
+                    if matrix[i,j]==matrix[i+1,j]:
                         d += 1
+                        
+            for i in range(N):
+                for j in range(N-1):
+                    if matrix[i,j]==matrix[i,j+1]:
+                        d += 1
+                        
             if d == 0:     
                 print (color.RED + "Game over" + color.END)
                 name = input("Please enter your name, mister: ")
