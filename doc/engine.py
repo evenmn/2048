@@ -1,14 +1,15 @@
 from random_options import *
 from tools import *
-from solver import *
+from solver_simple import *
 from time import sleep
+from move_tiles import *
 
 '''
 ---To be fixed---
 - Make program as universial as possible: dynamic size
 - Leaderboard can be performed more elegantly with dictioneries
 - And leaderboard spacing can be fixed
-'''
+''' 
 
 def Engine(N, M, goal, prob_doubleM, points, mode):
     matrix = np.zeros([N, N])           #Creating matrix
@@ -33,265 +34,25 @@ def Engine(N, M, goal, prob_doubleM, points, mode):
             arrow = input("Please use 'w', 's', 'a' or 'd' to move the tiles: ")
         elif mode == 1:
             arrow = best_swipe_dir(matrix)
-            #sleep(0.1)
-        moves = 0           #Number of tiles moving by one swipe
-        merges = 0          #Number of tiles merging by one swipe
+            #sleep(0.2)
+        
+        stat = Mover(matrix, num_goal, points, goal)
 
         #UpArrow
         if arrow == "w":
-
-            #---Move the tiles---
-            i=0
-
-            for j in range(4):
-                if matrix[i,j]!=0 or matrix[i+1,j]!=0 or matrix[i+2,j]!=0 or matrix[i+3,j]!=0:
-
-                    if matrix[i,j]==0:
-                        moves += 1
-                        while matrix[i,j]==0:
-                            matrix[i,j]=matrix[i+1,j]   
-                            matrix[i+1,j]=matrix[i+2,j]    
-                            matrix[i+2,j]=matrix[i+3,j]    
-                            matrix[i+3,j]=0
-	                    
-                    if matrix[i+1,j]==0 and (matrix[i+2,j]!=0 or matrix[i+3,j]!=0):
-                        moves += 1
-                        while matrix[i+1,j]==0:  
-                            matrix[i+1,j]=matrix[i+2,j]    
-                            matrix[i+2,j]=matrix[i+3,j]
-                            matrix[i+3,j]=0
-	                    
-                    if matrix[i+2,j]==0 and (matrix[i+3,j]!=0):
-                        moves += 1
-                        while matrix[i+2,j]==0:
-                            matrix[i+2,j]=matrix[i+3,j]   
-                            matrix[i+3,j]=0
-	    
-            #---Merge the tiles---
-            i=0
-
-            for j in range(4):
-                if matrix[i,j]==matrix[i+1,j]:
-                    matrix[i,j]=matrix[i,j]+matrix[i+1,j]
-                    matrix[i+1,j]=matrix[i+2,j]
-                    matrix[i+2,j]=matrix[i+3,j]
-                    matrix[i+3,j]=0
-                    points += matrix[i,j]
-                    if matrix[i,j] == goal:
-                        num_goal += 1
-                    if matrix[i,j] != 0:
-                        merges += 1
-	                
-                if matrix[i+1,j]==matrix[i+2,j]:
-                    matrix[i+1,j]=matrix[i+1,j]+matrix[i+2,j]
-                    matrix[i+2,j]=matrix[i+3,j]
-                    matrix[i+3,j]=0
-                    points += matrix[i+1,j]
-                    if matrix[i+1,j] == goal:
-                        num_goal += 1
-                    if matrix[i+1,j]!=0:
-                        merges += 1
-	                
-                if matrix[i+2,j]==matrix[i+3,j]:
-                    matrix[i+2,j]=matrix[i+2,j]+matrix[i+3,j]
-                    matrix[i+3,j]=0
-                    points += matrix[i+2,j]
-                    if matrix[i+2,j] == goal:
-                        num_goal += 1
-                    if matrix[i+2,j]!=0:
-                        merges += 1
+            moves, merges, num_goal, points = stat.move_up()  
                                 
         #DownArrow
         if arrow == "s":
-
-            #---Move the tiles---
-            i=0
-            
-            for j in range(4):
-                if matrix[i,j]!=0 or matrix[i+1,j]!=0 or matrix[i+2,j]!=0 or matrix[i+3,j]!=0:
-
-                    if matrix[i+3,j]==0:
-                        moves += 1
-                        while matrix[i+3,j]==0: 
-                            matrix[i+3,j]=matrix[i+2,j]   
-                            matrix[i+2,j]=matrix[i+1,j]    
-                            matrix[i+1,j]=matrix[i,j]    
-                            matrix[i,j]=0
-	                    
-                    if matrix[i+2,j]==0 and (matrix[i+1,j]!=0 or matrix[i,j]!=0):
-                        moves += 1
-                        while matrix[i+2,j]==0:  
-                            matrix[i+2,j]=matrix[i+1,j]    
-                            matrix[i+1,j]=matrix[i,j]
-                            matrix[i,j]=0
-	                    
-                    if matrix[i+1,j]==0 and (matrix[i,j]!=0):
-                        moves += 1
-                        while matrix[i+1,j]==0:
-                            matrix[i+1,j]=matrix[i,j]   
-                            matrix[i,j]=0
-	    
-            #---Merge the tiles---
-            i=0
-
-            for j in range(4):
-                if matrix[i+3,j]==matrix[i+2,j]:
-                    matrix[i+3,j]=matrix[i+3,j]+matrix[i+2,j]
-                    matrix[i+2,j]=matrix[i+1,j]
-                    matrix[i+1,j]=matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i+3,j]
-                    if matrix[i+3,j] == goal:
-                        num_goal += 1
-                    if matrix[i+3,j]!=0:
-                        merges += 1
-	                
-                if matrix[i+2,j]==matrix[i+1,j]:
-                    matrix[i+2,j]=matrix[i+2,j]+matrix[i+1,j]
-                    matrix[i+1,j]=matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i+2,j]
-                    if matrix[i+2,j] == goal:
-                        num_goal += 1
-                    if matrix[i+2,j]!=0:
-                        merges += 1
-	                
-                if matrix[i+1,j]==matrix[i,j]:
-                    matrix[i+1,j]=matrix[i+1,j]+matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i+1,j]
-                    if matrix[i+1,j] == goal:
-                        num_goal += 1
-                    if matrix[i+1,j]!=0:
-                        merges += 1
+            moves, merges, num_goal, points = stat.move_down()
 
         #LeftArrow
         if arrow == "a":
-
-            #---Move the tiles---
-            j=0
-
-            for i in range(4):
-                if matrix[i,j]!=0 or matrix[i,j+1]!=0 or matrix[i,j+2]!=0 or matrix[i,j+3]!=0:
-
-                    if matrix[i,j]==0:
-                        moves += 1
-                        while matrix[i,j]==0: 
-                            matrix[i,j]=matrix[i,j+1]   
-                            matrix[i,j+1]=matrix[i,j+2]    
-                            matrix[i,j+2]=matrix[i,j+3]    
-                            matrix[i,j+3]=0
-	                    
-                    if matrix[i,j+1]==0 and (matrix[i,j+2]!=0 or matrix[i,j+3]!=0):
-                        moves += 1
-                        while matrix[i,j+1]==0:  
-                            matrix[i,j+1]=matrix[i,j+2]    
-                            matrix[i,j+2]=matrix[i,j+3]
-                            matrix[i,j+3]=0
-	                    
-                    if matrix[i,j+2]==0 and (matrix[i,j+3]!=0):
-                        moves += 1
-                        while matrix[i,j+2]==0:
-                            matrix[i,j+2]=matrix[i,j+3]   
-                            matrix[i,j+3]=0
-
-            #---Merge the tiles---
-            j=0
-
-            for i in range(4):
-                if matrix[i,j]==matrix[i,j+1]:
-                    matrix[i,j]=matrix[i,j]+matrix[i,j+1]
-                    matrix[i,j+1]=matrix[i,j+2]
-                    matrix[i,j+2]=matrix[i,j+3]
-                    matrix[i,j+3]=0
-                    points += matrix[i,j]
-                    if matrix[i,j] == goal:
-                        num_goal += 1
-                    if matrix[i,j]!=0:
-                        merges += 1
-	                
-                if matrix[i,j+1]==matrix[i,j+2]:
-                    matrix[i,j+1]=matrix[i,j+1]+matrix[i,j+2]
-                    matrix[i,j+2]=matrix[i,j+3]
-                    matrix[i,j+3]=0
-                    points += matrix[i,j+1]
-                    if matrix[i,j+1] == goal:
-                        num_goal += 1
-                    if matrix[i,j+1]!=0:
-                        merges += 1
-	                
-                if matrix[i,j+2]==matrix[i,j+3]:
-                    matrix[i,j+2]=matrix[i,j+2]+matrix[i,j+3]
-                    matrix[i,j+3]=0
-                    points += matrix[i,j+2]
-                    if matrix[i,j+2] == goal:
-                        num_goal += 1
-                    if matrix[i,j+2]!=0:
-                        merges += 1
+            moves, merges, num_goal, points = stat.move_left()
 
         #RightArrow
         if arrow == "d":
-
-            #---Move the tiles---
-            j=0
-
-            for i in range(4):
-                if matrix[i,j]!=0 or matrix[i,j+1]!=0 or matrix[i,j+2]!=0 or matrix[i,j+3]!=0:
-
-                    if matrix[i,j+3]==0:
-                        moves += 1
-                        while matrix[i,j+3]==0: 
-                            matrix[i,j+3]=matrix[i,j+2]   
-                            matrix[i,j+2]=matrix[i,j+1]    
-                            matrix[i,j+1]=matrix[i,j]    
-                            matrix[i,j]=0
-	                    
-                    if matrix[i,j+2]==0 and (matrix[i,j+1]!=0 or matrix[i,j]!=0):
-                        moves += 1
-                        while matrix[i,j+2]==0:  
-                            matrix[i,j+2]=matrix[i,j+1]    
-                            matrix[i,j+1]=matrix[i,j]
-                            matrix[i,j]=0
-	                    
-                    if matrix[i,j+1]==0 and (matrix[i,j]!=0):
-                        moves += 1
-                        while matrix[i,j+1]==0:
-                            matrix[i,j+1]=matrix[i,j]   
-                            matrix[i,j]=0
-
-            #---Merge the tiles---
-            j=0
-	    
-            for i in range(4):
-                if matrix[i,j+3]==matrix[i,j+2]:
-                    matrix[i,j+3]=matrix[i,j+3]+matrix[i,j+2]
-                    matrix[i,j+2]=matrix[i,j+1]
-                    matrix[i,j+1]=matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i,j+3]
-                    if matrix[i,j+3] == goal:
-                        num_goal += 1
-                    if matrix[i,j+3]!=0:
-                        merges += 1
-
-                if matrix[i,j+2]==matrix[i,j+1]:
-                    matrix[i,j+2]=matrix[i,j+2]+matrix[i,j+1]
-                    matrix[i,j+1]=matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i,j+2]
-                    if matrix[i,j+2] == goal:
-                        num_goal += 1
-                    if matrix[i,j+2]!=0:
-                        merges += 1
-	                
-                if matrix[i,j+1]==matrix[i,j]:
-                    matrix[i,j+1]=matrix[i,j+1]+matrix[i,j]
-                    matrix[i,j]=0
-                    points += matrix[i,j+1]
-                    if matrix[i,j+1] == goal:
-                        num_goal += 1
-                    if matrix[i,j+1]!=0:
-                        merges += 1
+            moves, merges, num_goal, points = stat.move_right()
 
         #---Adding new tile on random empty spot---
         listfori = []
