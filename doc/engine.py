@@ -1,6 +1,6 @@
 from random_options import *
 from tools import *
-from solver_simple import *
+from solver_algorithm_manual import *
 from time import sleep
 from move_tiles import *
 
@@ -34,25 +34,23 @@ def Engine(N, M, goal, prob_doubleM, points, mode):
             arrow = input("Please use 'w', 's', 'a' or 'd' to move the tiles: ")
         elif mode == 1:
             arrow = best_swipe_dir(matrix)
-            #sleep(0.2)
-        
-        stat = Mover(matrix, num_goal, points, goal)
+            sleep(1.0)
 
         #UpArrow
         if arrow == "w":
-            moves, merges, num_goal, points = stat.move_up()  
+            moves, merges, num_goal, points = move_up(matrix, num_goal, points, goal)  
                                 
         #DownArrow
         if arrow == "s":
-            moves, merges, num_goal, points = stat.move_down()
+            moves, merges, num_goal, points = move_down(matrix, num_goal, points, goal)
 
         #LeftArrow
         if arrow == "a":
-            moves, merges, num_goal, points = stat.move_left()
+            moves, merges, num_goal, points = move_left(matrix, num_goal, points, goal)
 
         #RightArrow
         if arrow == "d":
-            moves, merges, num_goal, points = stat.move_right()
+            moves, merges, num_goal, points = move_right(matrix, num_goal, points, goal)
 
         #---Adding new tile on random empty spot---
         listfori = []
