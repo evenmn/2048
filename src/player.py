@@ -18,14 +18,6 @@ class Player:
         self.gui.render(self.game)
         self.gui.tear_down()
 
-
-def random_engine(game, speed=1):
-    from random import choice
-
-    time.sleep(speed)
-    return choice(list(game.ACTIONS.values()))
-
-
 class KeyboardListener:
     def __init__(self, game):
         self.game = game
@@ -64,9 +56,10 @@ class KeyboardListener:
 if __name__ == "__main__":
     from tzfe import Game
     from gui import TerminalGui, MatplotlibGui
+    from engine import Random
 
     game = Game(4, 4)
     keyboard_listener = KeyboardListener(game)
 
-    player = Player(game, random_engine, TerminalGui())
+    player = Player(game, Random(), TerminalGui())
     player.play_game()
