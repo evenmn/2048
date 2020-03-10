@@ -4,22 +4,22 @@ import time
 
 
 class Player:
-    def __init__(self, game, engine, gui=None):
+    def __init__(self, game, engine, gui):
         self.game = game
         self.engine = engine
         self.gui = gui
 
     def play_game(self):
         while not self.game.done:
-            #self.gui.render(self.game)
+            self.gui.render(self.game)
             action = self.engine(self.game)
-            #self.game = self.game(action)
+            self.game = self.game(action)
 
-        #self.gui.render(self.game)
-        #self.gui.tear_down()
+        self.gui.render(self.game)
+        self.gui.tear_down()
 
 
-def random_engine(game, speed=0.1):
+def random_engine(game, speed=1):
     from random import choice
 
     time.sleep(speed)
@@ -52,6 +52,9 @@ class KeyboardListener:
             self.game.done = True
 
     def __call__(self, game):
+    
+        action = self.game.ACTIONS["NONE"]
+    
         if len(self.action_list) > 0:
             action = self.action_list.pop(0)
 
@@ -60,9 +63,10 @@ class KeyboardListener:
 
 if __name__ == "__main__":
     from tzfe import Game
+    from gui import TerminalGui, MatplotlibGui
 
     game = Game(4, 4)
     keyboard_listener = KeyboardListener(game)
 
-    player = Player(game, random_engine)
+    player = Player(game, random_engine, TerminalGui())
     player.play_game()
