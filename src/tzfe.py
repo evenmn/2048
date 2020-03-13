@@ -8,7 +8,7 @@ class Game:
     GOAL = GROUNDTILE**11
     PROB4 = 0.1
     
-    ACTIONS = dict(NONE=0, UP=1, RIGHT=2, DOWN=3, LEFT=4)
+    ACTIONS = dict(UP=0, RIGHT=1, DOWN=2, LEFT=3)
     
     def __init__(self, board_height=4, board_width=4):
         self.board_height = board_height

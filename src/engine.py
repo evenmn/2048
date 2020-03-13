@@ -16,7 +16,7 @@ class Random:
     def __init__(self):
         return None
 
-    def __call__(self, state, speed=0):
+    def __call__(self, state):
         """This function returns a random integer
         in the interval (-1, 1). 
         
@@ -34,7 +34,6 @@ class Random:
         int
             which way to turn (-1 is left, 0 is no turn, 1 is right).
         """
-        time.sleep(speed)
         return choice(list(state.ACTIONS.values()))
 
 
@@ -97,6 +96,7 @@ class DNNEngine:
             predictions.append(self.model(x.float()))
             
         # Choose the best action
+        print(np.array(predictions, dtype=np.int))
         return np.argmax(np.array(predictions))
         
     def generate_action(self, state):
@@ -199,7 +199,7 @@ class DNNEngine:
                     # A move is considered as good if the snake 
                     # gets closer to the food or eats the food. 
                     if state.score > prev_score:
-                        target = 1
+                        target = 2
                     else:
                         target = 0
                     training_data.append(self.pack_data(prev_observation, action, target))

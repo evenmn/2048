@@ -56,21 +56,16 @@ class TerminalGui:
     def render(self, state):
         self._clear_terminal()
 
-        print(self.title.format(state.score))
+        print("\n", self.title.format(state.score), "\n")
         
-        list = []
         for i in range(state.board_height):
+            row = []
             for j in range(state.board_width):
                 if int(state.board[i,j]) == 0:
-                    list.append(color.GRAY + "0" + color.END)
+                    row.append(color.GRAY + "0" + color.END)
                 else:
-                    list.append(color.BOLD + "%.d" % int(state.board[i,j]) + color.BOLD)
-
-        print ("\t")
-        print ("\t", list[0],  "\t", list[1],  "\t", list[2],  "\t", list[3],  "\n")
-        print ("\t", list[4],  "\t", list[5],  "\t", list[6],  "\t", list[7],  "\n")
-        print ("\t", list[8],  "\t", list[9],  "\t", list[10], "\t", list[11], "\n")
-        print ("\t", list[12], "\t", list[13], "\t", list[14], "\t", list[15], "\n")
+                    row.append(color.BOLD + "%.d" % int(state.board[i,j]) + color.BOLD)
+            print("\t", "\t".join(row), "\n")
 
     def tear_down(self):
         pass

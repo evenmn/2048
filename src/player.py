@@ -9,11 +9,13 @@ class Player:
         self.engine = engine
         self.gui = gui
 
-    def play_game(self):
+    def play_game(self,pause=0.0):
         while not self.game.done:
+            time.sleep(pause)
             self.gui.render(self.game)
             action = self.engine(self.game)
-            self.game = self.game(action)
+            if action is not None:
+                self.game = self.game(action)
 
         self.gui.render(self.game)
         self.gui.tear_down()
@@ -45,8 +47,7 @@ class KeyboardListener:
 
     def __call__(self, game):
     
-        action = self.game.ACTIONS["NONE"]
-    
+        action = None
         if len(self.action_list) > 0:
             action = self.action_list.pop(0)
 
@@ -58,7 +59,7 @@ if __name__ == "__main__":
     from gui import TerminalGui, MatplotlibGui
     from engine import Random
 
-    game = Game(4, 4)
+    game = Game(10, 10)
     keyboard_listener = KeyboardListener(game)
 
     player = Player(game, Random(), TerminalGui())
