@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class color:
    PURPLE    = '\033[95m'
@@ -44,10 +45,32 @@ class MatplotlibGui:
     def tear_down(self):
         plt.clf()
 
+class HeatmapGui:
+    def __init__(self):
+        sns.set()
+        plt.figure()
+        
+    def render(self, state):
+        plt.clf()
+        plt.title("goal: " + str(state.GOAL) + " score: " + str(state.score))
+        sns.heatmap(np.array(state.board,dtype=np.int),
+                    annot=True,
+                    vmin=0,
+                    vmax=state.GOAL,
+                    linewidths=.5,
+                    cmap="prism",
+                    square=True,
+                    fmt="d",
+                    cbar=False)
+        plt.axis('off')
+        plt.pause(0.0001)
+        plt.draw()
+
+    def tear_down(self):
+        plt.clf()
 
 class TerminalGui:
-    def __init__(self, title="2048"):
-        self.title = title + " score: {0}"
+    def __init__(self):
         self._clear_terminal()
 
     def _clear_terminal(self):
@@ -56,7 +79,7 @@ class TerminalGui:
     def render(self, state):
         self._clear_terminal()
 
-        print("\n", self.title.format(state.score), "\n")
+        print("\n", state.GOAL, self.title.format(state.score), "\n")
         
         for i in range(state.board_height):
             row = []
@@ -69,11 +92,3 @@ class TerminalGui:
 
     def tear_down(self):
         pass
-
-
-if __name__ == "__main__":
-    from snake import SnakeGame
-
-    gui = MatplotlibGui()
-    gui.render(SnakeGame(initial_length=7))
-    plt.show()

@@ -55,12 +55,12 @@ class KeyboardListener:
 
 
 if __name__ == "__main__":
-    from tzfe import Game
-    from gui import TerminalGui, MatplotlibGui
+    from tzfe import TZFE
+    from gui import TerminalGui, MatplotlibGui, HeatmapGui
     from engine import Random
 
-    game = Game()
-    keyboard_listener = KeyboardListener(game)
+    tzfe = TZFE(4,4)
+    keyboard_listener = KeyboardListener(tzfe)
 
-    player = Player(game, keyboard_listener, TerminalGui())
-    player.play_game()
+    player = Player(tzfe, Random(), HeatmapGui())
+    player.play_game(pause=0)

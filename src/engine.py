@@ -3,7 +3,7 @@ import numpy as np
 import time
 import torch
 import torch.nn as nn
-from tzfe import Game
+from tzfe import TZFE
 
 ################################################################
 # RANDOM ENGINE
