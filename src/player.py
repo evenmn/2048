@@ -9,7 +9,7 @@ class Player:
         self.engine = engine
         self.gui = gui
 
-    def play_game(self,pause=0.0):
+    def play_game(self,pause=0.05):
         while not self.game.done:
             time.sleep(pause)
             self.gui.render(self.game)
@@ -59,8 +59,8 @@ if __name__ == "__main__":
     from gui import TerminalGui, MatplotlibGui
     from engine import Random
 
-    game = Game(10, 10)
+    game = Game()
     keyboard_listener = KeyboardListener(game)
 
-    player = Player(game, Random(), TerminalGui())
+    player = Player(game, keyboard_listener, TerminalGui())
     player.play_game()

@@ -1,7 +1,7 @@
 import numpy as np
 from random import randint, choice
 
-class Game:
+class TZFE:
     """2048 game setup. """
     
     GROUNDTILE = 2
@@ -36,9 +36,9 @@ class Game:
     def new_tile(num_choices=10):
         """Find the value of the new tile. """
         # Create array with all the choices
-        num_4 = int(Game.PROB4 * num_choices)    # Number of 4s
-        choices = Game.GROUNDTILE * np.ones(num_choices)
-        choices[:num_4] = 2 * Game.GROUNDTILE * np.ones(num_4)
+        num_4 = int(TZFE.PROB4 * num_choices)    # Number of 4s
+        choices = TZFE.GROUNDTILE * np.ones(num_choices)
+        choices[:num_4] = 2 * TZFE.GROUNDTILE * np.ones(num_4)
         return choice(choices)          # Value of new tile
 
     def _place_tile(self, tile_val):
@@ -78,18 +78,19 @@ class Game:
         moves = 0           #Number of tiles moving by one swipe
         merges = 0          #Number of tiles merging by one swipe
 
-        # Loop over columns
+        # Move tiles
         for j in range(board_width):
             for i in range(board_height-1):
-                # Move tiles
-                if np.any(board[i:, j] > 0):
+                if np.any(board[i:,j] > 0):
                     while board[i,j]==0:
                         for k in range(i, board_height-1):
                             board[k,j]=board[k+1,j]    
                         board[board_height-1,j]=0
                         moves += 1
 
-                # Merge tiles
+        # Merge tiles
+        for j in range(board_width):
+            for i in range(board_height-1):
                 if board[i,j]==board[i+1,j] and board[i,j]!=0:
                     board[i,j]=board[i,j]+board[i+1,j]
                     for k in range(i+1, board_height-1):
@@ -125,7 +126,5 @@ class Game:
                         
             
 if __name__ == "__main__":
-    game = Game(5, 5)
-    print(game.board)
-    game(0)
-    print(game.board)
+    tzfe = TZFE(5, 5)
+    print(tzfe.board)
